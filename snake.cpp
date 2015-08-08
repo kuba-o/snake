@@ -5,6 +5,8 @@
 
 using namespace std;
 
+float a, b;
+
 void initGL() {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
@@ -30,6 +32,24 @@ void showGame(){
   glFlush();
 }
 
+void keyboard(unsigned char key, int x, int y){
+    switch (key){
+    case 'w':
+      //glClearColor (1.0, 0.0, 0.0, 0.0);
+      a+=10;
+      break;
+ 
+    case 's':
+      //glClearColor (0.0, 1.0, 0.0, 0.0);
+      a -= 10.0;
+    break;
+ 
+    default:
+         break;
+  }
+   glutPostRedisplay(); //request display() call ASAP
+}
+
 void reshape (int w, int h)
 {
   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
@@ -40,6 +60,10 @@ void reshape (int w, int h)
 
 int main(int argc, char** argv) {
   srand( time( NULL ) );
+
+  a = rand()%800;
+  b = rand()%600;
+
   glutInit(&argc, argv);
   glutCreateWindow("leSnake");
   glutInitWindowPosition(50, 50);
@@ -47,6 +71,7 @@ int main(int argc, char** argv) {
   initGL();
   glutDisplayFunc(showGame); 
   glutReshapeFunc(reshape);
+  glutKeyboardFunc(keyboard);
   glutMainLoop();
   
   return 0;
