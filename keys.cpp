@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <GL/glut.h>
-
+#include <iostream>
 float red=1,green=1,blue=1;
 
+using namespace std;
 
 
 void init (void)
@@ -70,7 +71,7 @@ int main(int argc, char **argv)
 
     glutDisplayFunc(display);
 
-
+    cout<<"TEST"<<endl;
     glutSpecialFunc( process_Normal_Keys );
     glutKeyboardFunc( process_SHIFT_ALT_CTRL );  
 

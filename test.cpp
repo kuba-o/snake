@@ -11,9 +11,19 @@ char dir = 'd';
 float a, b;
 float c = 0.0;
 float d = 0.0;
-char actual;
+float tempx1, tempx2, tempy1, tempy2;
+char previousDirection = 'd';
+char direction;
 vector<float> wonszx;
 vector<float> wonszy;
+
+class SnakeField {
+public:
+  float x;
+  float y;
+};
+
+vector<SnakeField> wonsz;
 
 void Timer(int iUnused)
 {
@@ -29,39 +39,42 @@ void displayBoard(){
   glClear (GL_COLOR_BUFFER_BIT);
 }
 
-void lel(char asd){
-  dir = asd;
-    if (dir == 'w')
-      wonszy[0] = abs(fmod(wonszy[0]+5, 600));
-    else if (dir == 's'){
-      if (wonszy[0]<0)
-        wonszy[0] = 600;
-      wonszy[0] = fmod(wonszy[0]-5, 600);
-    }
-    else if (dir == 'a'){
-      if (wonszx[0] < 0)
-        wonszx[0] = 800;
-      wonszx[0] = fmod(wonszx[0]-5, 800);
-    }
-    else if (dir == 'd')
-      wonszx[0] =abs(fmod(wonszx[0]+5, 800));
-}
-
 void drawSnake(){
   glColor3f(1.0, 1.0, 0.0);
   glPointSize(5.0);
   glBegin(GL_POINTS);
-    glVertex2f(wonszx[0], wonszy[0]);
+    glVertex2f(wonsz[0].x, wonsz[0].y);
     glColor3f(0.0, 1.0, 0.0);
-    for (int i =1; i<wonszx.size(); i++){
-      glVertex2f(wonszx[i], wonszy[i]);
+    for (int i =1; i<wonsz.size(); i++){
+      glVertex2f(wonsz[i].x, wonsz[i].y);
     }
   glEnd();
 }
 
+void moveSnake(char key){
+  if (key == 'w' || key == 'a' || key == 's' || key == 'd'){
+    direction = key;
+  }
+
+  if (direction == 'w' && previousDirection !='s'){
+    wonsz[0].y = fmod(wonsz[0].y+5, 600);
+    
+
+  }
+  else if (direction == 's' && previousDirection!='w'){
+
+  }
+  else if (direction == 'a' && previousDirection!='d'){
+
+  }
+  else if (direction == 'd' && previousDirection!='a'){
+
+  }
+}
+
+
 void getField(){
   glColor3f (1.0, 0.0, 0.0);
-
   glPointSize(5.0);
   glBegin(GL_POINTS);
     glVertex2f(a, b);
@@ -70,33 +83,14 @@ void getField(){
 
 void showGame(){
   displayBoard();
+  //turnSnake(dir);
   //getField();
-  lel(dir);
   drawSnake();
   glFlush();
 }
 
 void keyboard(unsigned char key, int x, int y){
-    switch (key){
-    case 'd':
-      a+=10;
-      break;
- 
-    case 'a':
-      a -= 10.0;
-    break;
-
-    case 'w':
-      b += 10;
-    break;
-
-    case 's':
-      b -= 10;
- 
-    default:
-      break;
-  }
-    lel(key);
+  //turnSnake(key);
 }
 
 void reshape (int w, int h)
@@ -112,25 +106,25 @@ int main(int argc, char** argv) {
 
   a = rand()%800;
   b = rand()%600;
-
   
-  wonszx.push_back(65);
-  /*
-  wonszx.push_back(60);
-  wonszx.push_back(55);
-  wonszx.push_back(50);
-  */
-  wonszy.push_back(10);
-  /*
-  wonszy.push_back(10);
-  wonszy.push_back(10);
-  wonszy.push_back(10);
-  */
+  SnakeField temp;
+
+  temp.x = 80;
+  temp.y = 120;
+  wonsz.push_back(temp);
+  temp.x = 75;
+  temp.y = 120;
+  wonsz.push_back(temp);
+  temp.x = 70;
+  temp.y = 120;
+  wonsz.push_back(temp);
+
   glutInit(&argc, argv);
   glutCreateWindow("leSnake");
   glutInitWindowPosition(50, 50);
   glutReshapeWindow(800, 600);
   initGL();
+  getField();
   glutReshapeFunc(reshape);
   glutKeyboardFunc(keyboard);
   glutDisplayFunc(showGame);
